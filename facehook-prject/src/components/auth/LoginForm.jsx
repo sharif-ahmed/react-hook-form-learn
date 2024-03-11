@@ -2,8 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import Field from "../common/Field";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginForm = () => {
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -13,6 +15,8 @@ const LoginForm = () => {
 
   const submitForm = (formData) => {
     console.log(formData);
+    const user = { ...formData };
+    setAuth({ user });
     navigate("/");
   };
 
@@ -25,8 +29,9 @@ const LoginForm = () => {
         <Field label={"Email"} htmlFor={"email"} error={errors.email}>
           <input
             {...register("email", { required: "Email is required" })}
-            className={`auth-input ${errors.email ? "border-red-500" : "border-gray-200"
-              }`}
+            className={`auth-input ${
+              errors.email ? "border-red-500" : "border-gray-200"
+            }`}
             type="email"
             name="email"
             id="email"
@@ -35,18 +40,16 @@ const LoginForm = () => {
 
         <Field label={"Password"} htmlFor={"password"} error={errors.password}>
           <input
-            {...register(
-              "password",
-              {
-                required: "Password is required",
-                minLength: {
-                  value: 8,
-                  message: "Your password must be at least 8 characters"
-                }
-              })
-            }
-            className={`auth-input ${errors.email ? "border-red-500" : "border-gray-200"
-              }`}
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Your password must be at least 8 characters",
+              },
+            })}
+            className={`auth-input ${
+              errors.email ? "border-red-500" : "border-gray-200"
+            }`}
             type="password"
             name="password"
             id="password"
